@@ -3,10 +3,9 @@ const sendForm = () => {
     loadMessage = "Загрузка...",
     successMessage = "Спасибо...Мы скоро с вами свяжемся";
   const form = document.querySelectorAll("form"),
-    statusMessage = document.createElement("div");
+    statusMessage = document.createElement("p");
   statusMessage.style.color = "red";
   const image = document.createElement("img");
-  image.src = "./images/load.gif";
   statusMessage.append(image);
   const inputs = document.querySelectorAll("input"),
     popup = document.querySelector(".popup");
@@ -17,30 +16,14 @@ const sendForm = () => {
     });
   };
   // настройка отправки
-  const postData = (body) => {
-    return fetch("./server.php", {
+  const sendData = (data) => {
+    return fetch("https://jsonplaceholder.typicode.com/posts", {
       method: "POST",
+      body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        "Content-type": "application/json; charset=UTF-8",
       },
-      body: JSON.stringify(body),
-    });
-    // const request = new XMLHttpRequest();
-    // return new Promise((resolve, reject) => {
-    //   request.addEventListener("readystatechange", () => {
-    //     if (request.readyState !== 4) {
-    //       return;
-    //     }
-    //     if (request.status === 200) {
-    //       resolve();
-    //     } else {
-    //       reject(request.status);
-    //     }
-    //   });
-    //   request.open("POST", "./server.php");
-    //   request.setRequestHeader("Content-Type", "application/json");
-    //   request.send(JSON.stringify(body));
-    // });
+    }).then((res) => res.json());
   };
 
   form.forEach((item) => {
@@ -53,11 +36,9 @@ const sendForm = () => {
       formData.forEach((item, key) => {
         body[key] = item;
       });
-      postData(body)
+      sendData(body)
         .then((response) => {
-          if (response.status !== 200) {
-            throw new Error("status network not 200");
-          }
+          statusMessage.style.color = "green";
           statusMessage.textContent = successMessage;
           cleanInputs();
           setTimeout(() => {
