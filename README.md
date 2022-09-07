@@ -1,1 +1,2 @@
-<!-- Склонировать проект, прописать npm install,  запустить проект npm start-->
+For start project
+# `npm start`
